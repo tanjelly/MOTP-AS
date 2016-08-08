@@ -1,0 +1,85 @@
+MOTP-AS 安装
+=======================
+
+
+前提条件
+-------------
+
+你需要安装下列软件:
+* MySQL
+* Apache
+* PHP
+* FreeRadius 
+
+
+
+安装
+------------
+
+1. 修改下列文件中默认的数据库访问用户名/密码:
+	- Setup/MySQL/motp_schema.sql
+	- Setup/config.php
+
+2. 创建 SQL 数据库
+	你可以使用下面的命令通过安装脚本来创建数据库:
+		mysql -u root -p  < Setup/MySQL/motp_schema.sql
+	这个脚本将进行如下操作 
+		- 创建数据库 "motp"
+		- 在数据库 "motp" 中创建所有需要的表 
+		- 创建一个数据库用户 "motp", 用于访问数据库 "motp"
+		- 添加默认管理员用户 "admin", 并设置静态密码为 "motp"
+	如果你希望使用不同的数据库名、用户等, 你可以通过编辑 Setup/config.php 来实现。
+
+3. 安装 PHP 文件
+	将 HTML 目录下的所有文件（含目录）复制到 Web 应用根目录下.
+
+4. FreeRadius
+	找到 Freeradius 的配置文件所在目录 (通常为 /etc/raddb),
+	首先对原配置文件进行备份, 然后按照下面的描述对配置文件进行修改. 
+	修改完成后, 需要重新加载 freeradius.
+
+    a) 认证
+	用 "Setup/Freeradius/users" 代替 "users" 配置文件, 
+	分别修改 "users" 文件中 PHP程序 和 Web 应用根目录的路径. 
+	请确认位于 "post-auth" 部分的 "exec" 模块已经启用, 
+	否则, 所有请求都将会变成认证状态（相当于万能密码认证）!
+
+    b) RADIUS 客户端
+	如果你不想通过 MOTP-AS 来管理你的 RADIUS 客户端, 请跳过下面的步骤.
+	管理 RADIUS 客户端的方法依赖于你使用的 freeradius 版本:
+	在旧版本中, 你必须修改 "clients.conf", 而 2.1 或更新的版本可以配置
+	为使用动态客户端.
+
+	要使用动态客户端, 需要复制文件 "Setup/FreeRadius/dynamic-clients"
+	到配置文件的 "sites-enabled" 目录, 然后修改文件中的 PHP 程序和 Web
+	应用的路径. 这样 Freeradius 就能够通过 MOTP-AS 接受所有客户端了.
+
+	对于旧版本, 满足下面两个条件,MOTP-AS 就能够自动生成配置文件 "clients.conf"：
+		- 将 config.php 文件中的 RADIUS_CONF_CLIENTS 取消注释, 并正确
+		设置配置文件路径
+		- 确保 apache 用户（例如nobody）具有配置文件 "clients.conf" 的
+		写入权限
+	注意: MOTP-AS 不会导入 "clients.conf" 中已存在的条目, 而是直接覆盖.
+	"clients.conf" 的每一次修改都必须要重新加载 freeradius. 通过进入如下
+	配置可以让 MOTP_AS 在写入 clients.conf 后自动重载 freeradius:
+		- 将 config.php 文件中的 RADIUS_SERV_RELOAD 取消注释, 并正确设
+		置其中的重载命令
+		- 确保 apache 用户能够正确执行设置的重载命令.
+
+    c) 记账
+	用 "Setup/Freeradius/accounting" 文件的内容覆盖配置文件 "sites-enab
+	led/default" 中的 "accounting" 部分. 别忘了修改其中的路径.
+
+
+配置
+-------------
+
+ - 登录到你的 MOTP-AS 管理页面 http://your.server/
+	用户名: admin
+	密  码: motp
+
+ - 修改 admin 用户的密码:
+	=> 管理
+	=> 用户管理
+	=> admin
+	=> 静态密码
