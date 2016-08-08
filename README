@@ -1,37 +1,32 @@
-
-Mobile OTP Authentication Server - MOTP-AS
+Mobile OTP 认证服务器 - MOTP-AS
 ==========================================
 
-MOTP-AS is an add-on for the Mobile OTP authentication framework.
-For more details about Mobile OTP see http://motp.sourceforge.net/.
+MOTP-AS 是 Mobile OTP 认证框架的一个组件.
+要了解更多 Mobile OTP 详情, 请访问 http://motp.sourceforge.net/.
 
 
-With MOTP-AS you can build an authentication server with
+你可以使用 MOTP-AS 搭建一个包含以下特性的认证服务器：
 
-  * authenticating users by RADIUS
-	RADIUS is a standard protocol used by many routers, firewalls and VPN
-	gateways. It is also possible to use it to authenticate users against
-	Apache, Unix (PAM) and other applications.
+  * 通过 RADIUS 进行用户身份验证
+	RADIUS 是受很多路由器、防火墙和 VPN 网关支持的标准协议. 也可以用来进行 Apache,
+	Unix (PAM) 和其他应用的用户身份验证.
 
-  * SQL database for user/device configuration
-	All configuration and administration data is stored into a SQL database.
-	This includes users and devices (secrets)
+  * 使用 SQL 数据库配置用户和设备
+	所有的配置和管理数据（包括用户和设备、密钥）都存储在一个 SQL 数据库中.
 
-  * Administration Web Interface
-	Adminstration of the SQL database can be performed by an Administration
-	Web Interface which supports different roles for Administrators, 
-	Help Desk and Users.
+  * Web 管理接口
+	Web 管理接口提供了管理员、客服（Help Desk）和用户三种不同的角色来操作 SQL 数据库.
 
 
-Compared to other MOTP implementations, MOTP-AS provides the following features:
+相比其它的 MOTP 实现, MOTP-AS 提供了以下特性:
 
- - A user can have more then one device or pin, respectively. 
- - Many users can share the same device (using different pins).
- - Users can change their pins by login on the Web Administration Interface
- - The server automatically learns device time drifts by storing the time shift
- - Users can have temporary static passwords
+ - 同一个用户可以有多个设备和 PIN 码. 
+ - 多个用户能够共用同一个设备(使用不同的 PIN 码).
+ - 用户可以通过登录 Web 管理接口修改自己的 PIN 码
+ - 通过存储时间偏移量, 服务器能够自动学习设备时间的偏移
+ - 用户可以保留临时的静态密码
 
 
-If you have any questions or want to report a bug, please send an email to 
-motp-as@network-cube.de
+如果你有任何问题或者想要上报一个缺陷, 请发送邮件至 motp-as@network-cube.de
+
 
